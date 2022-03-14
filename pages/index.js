@@ -17,7 +17,7 @@ export default function Home() {
           <UberLogo src='https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg'></UberLogo>
           <Profile>
             <Name>Captain Levi</Name>
-            <UserImage src='https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500' />
+            <UserImage src='https://cdn.wallpapersafari.com/95/12/uq7ToG.jpeg' />
           </Profile>
         </Header>
         <ActionButtons>
