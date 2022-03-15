@@ -4,11 +4,37 @@ import styles from '../styles/Home.module.css'
 import tw from 'tailwind-styled-components'
 import Map from './components/Map'
 import Link from 'next/link'
+import { auth } from '../firebase'
+import { useEffect, useState } from 'react'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { useRouter } from 'next/router'
 
 export default function Home() {
   //
   //
+  const [user, setUser] = useState(null)
+  const router = useRouter()
 
+  useEffect(() => {
+    // listener for whether user is logged in,
+    // if logged in, set user to display name and photoURL
+    return onAuthStateChanged(auth, (user) => {
+      // user is an actual Google user
+      if (user) {
+        // if the user exists
+        setUser({
+          name: user.displayName,
+          photoUrl: user.photoURL,
+        })
+      } else {
+        // if the user doesn't exist, set user to null and redirect to login page
+        setUser(null)
+        router.push('/login')
+      }
+    })
+  }, [])
+
+  // <UserImage src='https://cdn.wallpapersafari.com/95/12/uq7ToG.jpeg' />
   return (
     <Wrapper>
       <Map />
@@ -16,8 +42,11 @@ export default function Home() {
         <Header>
           <UberLogo src='https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg'></UberLogo>
           <Profile>
-            <Name>Captain Levi</Name>
-            <UserImage src='https://cdn.wallpapersafari.com/95/12/uq7ToG.jpeg' />
+            <Name>{user && user.name}</Name>
+            <UserImage
+              src={user && user.photoUrl}
+              onClick={() => signOut(auth)}
+            />
           </Profile>
         </Header>
         <ActionButtons>
@@ -67,7 +96,7 @@ const Name = tw.div`
 `
 
 const UserImage = tw.img` 
-  h-12 w-12 rounded-full border border-gray-200 p-px
+  h-12 w-12 rounded-full border border-gray-200 p-px cursor-pointer
 `
 
 const ActionButtons = tw.div` 
